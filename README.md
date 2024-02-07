@@ -10,54 +10,52 @@ Logger is a logging library for handling log messages and notifying logger targe
 
 ## Installation
 
-`npm install @isacrodriguesdev/logger`
+`npm install @workehub/logger`
 
 ## Usage
 
-1. Import the necessary classes and interfaces from the `@isacrodriguesdev/logger` package:
+1. Import the necessary classes and interfaces from the `@workehub/logger` package:
 
 ```typescript
-import { Logger, ILogger } from "@isacrodriguesdev/logger";
+import { LoggerObserver, LoggerPayload } from "@workehub/logger";
 ```
 
-2. Create a class that implements the `ILogger.Observer` interface to define a logger target. For example, here's an implementation using Kafka as the target:
+2. Create a class that implements the `LoggerObserver` interface to define a logger target. For example, here's an implementation using Kafka as the target:
 
 ```typescript
-class KafkaLog implements ILogger.Observer {
+class KafkaLog extends LoggerObserver {
   private kafka: any; // Import the correct Kafka library here
 
   constructor() {
+    super();
     // Initialize the connection to Kafka
     this.kafka = /* Initialize the connection to Kafka */;
   }
 
-  update(data: ILogger.Payload): void {
+  update(payload: LoggerPayload): void {
     // Send the log message to the Kafka queue
-    this.kafka.sendMessage(data);
+    this.kafka.sendMessage(payload);
   }
 }
 ```
 
-3. Create an instance of the `Logger` class and register your logger targets:
+3. Use the static methods of the `Logger` class to manage logger targets:
 
 ```typescript
-// Create an instance of the Logger class
-const logger = new Logger();
-
 // Create instances of the logger targets you want to use
 const consoleLog = new ConsoleLog(); // Example using ConsoleLog
 const kafkaLog = new KafkaLog(); // Example using KafkaLog
 
-// Attach the logger observers in the Logger instance
-logger.attach("console", consoleLog);
-logger.attach("kafka", kafkaLog);
+// Attach the logger observers using static methods of the Logger class
+Logger.attach("console", consoleLog);
+Logger.attach("kafka", kafkaLog);
 ```
 
 4. Use the `notify` method to send log messages to the registered logger targets:
 
 ```typescript
 // Create an example log payload
-const payload = {
+const payload: LoggerPayload = {
   level: "event",
   message: "New event created",
   additionalInfo: {
@@ -69,12 +67,12 @@ const payload = {
 };
 
 // Notify the logger to send the payload to the registered logger targets
-logger.notify(["console", "kafka"], payload);
+Logger.notify(["console", "kafka"], payload);
 ```
 
 ## Note
 
-The `ConsoleLog` target is included by default and does not need to be explicitly registered. You can simply call `logger.notify(["console"]`, payload) to log messages to the console.
+The `ConsoleLog` target is included by default and does not need to be explicitly registered. You can simply call `Logger.notify(["console"]`, payload) to log messages to the console.
 
 ## Screenshots
 
@@ -82,13 +80,7 @@ The `ConsoleLog` target is included by default and does not need to be explicitl
 
 ## API
 
-### Logger Class
-
-#### `constructor()`
-
-Creates a new instance of the Logger class.
-
-#### `notify(types: string[], payload: ILogger.Payload): void`
+#### `static notify(types: string[], payload: LoggerPayload): void`
 
 Notifies the specified logger targets with the log data.
 
@@ -98,18 +90,9 @@ Notifies the specified logger targets with the log data.
   - `message`: The log message.
   - `additionalInfo` (optional): Additional information to include in the log.
 
-#### `attach(type: string, observer: ILogger.Observer): void`
+#### `static attach(type: string, observer: LoggerObserver): void`
 
 Registers a logger target with the specified type.
 
 - `type`: The type name for the logger target.
 - `observer`: An instance of a logger target implementation.
-
-### ILogger Interface
-
-```typescript
-export declare abstract class ILogger {
-  public abstract notify(types: string[], payload: ILogger.Payload): void;
-  public abstract attach(type: string, observer: ILogger.Observer): void;
-}
-```
