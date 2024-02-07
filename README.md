@@ -23,11 +23,10 @@ import { LoggerObserver, LoggerPayload } from "@workehub/logger";
 2. Create a class that implements the `LoggerObserver` interface to define a logger target. For example, here's an implementation using Kafka as the target:
 
 ```typescript
-class KafkaLog extends LoggerObserver {
+class KafkaLog implements LoggerObserver {
   private kafka: any; // Import the correct Kafka library here
 
   constructor() {
-    super();
     // Initialize the connection to Kafka
     this.kafka = /* Initialize the connection to Kafka */;
   }
