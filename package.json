@@ -1,6 +1,6 @@
 {
   "name": "@workehub/logger",
-  "version": "1.0.7",
+  "version": "1.0.0",
   "description": "Logger is a logging library for handling log messages and notifying logger targets",
   "main": "lib/index.js",
   "scripts": {
