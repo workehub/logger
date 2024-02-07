@@ -1,0 +1,36 @@
+{
+  "name": "@workehub/logger",
+  "version": "1.0.7",
+  "description": "Logger is a logging library for handling log messages and notifying logger targets",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "tsc && node lib/index.js",
+    "dev": "tsx --watch && node src/index.ts",
+    "publish": "tsc && npm publish --access public",
+    "build": "node esbuild.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/workehub/logger"
+  },
+  "author": "workehub",
+  "license": "ISC",
+  "keywords": [
+    "logger",
+    "logging",
+    "log",
+    "log message",
+    "log target",
+    "log level",
+    "log level filter",
+    "log message filter",
+    "log message formatter",
+    "log",
+    "notify"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.3.2",
+    "tsx": "^4.7.0",
+    "typescript": "^4.9.5"
+  }
+}
